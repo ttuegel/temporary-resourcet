@@ -27,6 +27,7 @@ homepage:       http://www.github.com/ttuegel/temporary-resourcet
 build-type:     Simple
 
 Library
+  hs-source-dirs: src
   exposed-modules:
     System.IO.Temp
   other-modules:
