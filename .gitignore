@@ -5,3 +5,4 @@ Thumbs.db
 # Build artifacts
 dist/
 
+.*.swp
