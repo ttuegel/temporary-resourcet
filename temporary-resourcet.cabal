@@ -1,6 +1,6 @@
 name:           temporary-resourcet
 version:        0.1.0.0
-cabal-version:  >= 1.6
+cabal-version:  >= 1.8
 synopsis:       Portable temporary files and directories with automatic deletion
 description:
   The functions for creating temporary files and directories in the base
@@ -43,3 +43,16 @@ Library
 
   if !os(windows)
     build-depends: unix >=2.3
+
+test-suite test-temporary-resourcet
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: Test.hs
+  build-depends:
+    base >=3 && <10,
+    directory >=1.0,
+    resourcet >=0.3 && <2,
+    tasty ==0.8.*,
+    tasty-hunit ==0.8.*,
+    temporary-resourcet,
+    transformers >=0.2.0.0
