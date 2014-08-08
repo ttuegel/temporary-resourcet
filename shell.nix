@@ -1,4 +1,4 @@
-{ pkgs ? (import <nixpkgs> {}), haskellPackages ? pkgs.haskellPackages_ghc782
+{ pkgs ? (import <nixpkgs> {}), haskellPackages ? pkgs.haskellPackages_ghc783
 , hsDevTools ? pkgs.hsDevTools }:
 
 let inherit (haskellPackages)
