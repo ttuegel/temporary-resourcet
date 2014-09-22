@@ -15,7 +15,7 @@ import Control.Monad.IO.Class ( MonadIO(..) )
 import Control.Monad.Trans.Resource ( MonadResource, ReleaseKey, allocate )
 import System.Directory
         ( doesDirectoryExist, doesFileExist, getTemporaryDirectory
-        , removeDirectory, removeFile )
+        , removeDirectory, removeDirectoryRecursive, removeFile )
 import System.IO ( Handle )
 
 import qualified Distribution.Compat.TempFile as Compat
@@ -33,7 +33,7 @@ createTempDirectory :: MonadResource m
                     -> m (ReleaseKey, FilePath)
 createTempDirectory mDir tmpl = do
     dir <- resolveTempDir mDir
-    allocate (Compat.createTempDirectory dir tmpl) removeDirectoryIfExists
+    allocate (Compat.createTempDirectory dir tmpl) removeDirectoryRecursive
 
 -- | Open a temporary file in binary mode. The file will be readable and
 -- writeable, but only by the current user. The file will be deleted when
@@ -69,11 +69,6 @@ openTempFile mDir tmpl = do
     (key, (path, h)) <- allocate (Compat.openTempFile dir tmpl)
                                  (removeFileIfExists . fst)
     return (key, path, h)
-
-removeDirectoryIfExists :: FilePath -> IO ()
-removeDirectoryIfExists path = do
-    exists <- doesDirectoryExist path
-    when exists $ removeDirectory path
 
 removeFileIfExists :: FilePath -> IO ()
 removeFileIfExists path = do
