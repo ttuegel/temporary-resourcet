@@ -1,5 +1,3 @@
-{ pkgs ? (import <nixpkgs> {}) }:
-
-with pkgs;
+with (import <nixpkgs> {}).pkgs;
 
 haskellPackages.callPackage ./default.nix {}
