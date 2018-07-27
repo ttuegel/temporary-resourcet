@@ -1,27 +1,28 @@
 module Main where
 
-import Test.Tasty
-import Test.Tasty.HUnit
+import           Test.Tasty
+import           Test.Tasty.HUnit
 
-import Control.Monad ( liftM )
-import Control.Monad.IO.Class ( liftIO )
-import Control.Monad.Trans.Resource
-import System.Directory ( doesDirectoryExist, doesFileExist )
-import System.IO.Temp
+import           Control.Monad                (liftM)
+import           Control.Monad.IO.Class       (liftIO)
+import           Control.Monad.Trans.Resource
+import           System.Directory             (doesDirectoryExist,
+                                               doesFileExist)
+import           System.IO.Temp
 
 main :: IO ()
 main = defaultMain $ testGroup "temporary-resourcet"
     [ testGroup "createTempDirectory"
-        [ testCase "release" $ assert test_createTempDirectory_release
-        , testCase "runResourceT" $ assert test_createTempDirectory_runResourceT
+        [ testCase "release" $ test_createTempDirectory_release @? "Directory still exists"
+        , testCase "runResourceT" $ test_createTempDirectory_runResourceT @? "Directory still exists"
         ]
     , testGroup "openBinaryTempFile"
-        [ testCase "release" $ assert test_openBinaryTempFile_release
-        , testCase "runResourceT" $ assert test_openBinaryTempFile_runResourceT
+        [ testCase "release" $ test_openBinaryTempFile_release @? "File still exists"
+        , testCase "runResourceT" $ test_openBinaryTempFile_runResourceT @? "File still exists"
         ]
     , testGroup "openTempFile"
-        [ testCase "release" $ assert test_openTempFile_release
-        , testCase "runResourceT" $ assert test_openTempFile_runResourceT
+        [ testCase "release" $ test_openTempFile_release @? "File still exists"
+        , testCase "runResourceT" $ test_openTempFile_runResourceT @? "File still exists"
         ]
     ]
 
