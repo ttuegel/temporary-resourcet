@@ -1,17 +1,32 @@
-{ mkDerivation, base, directory, exceptions, filepath, resourcet
-, stdenv, tasty, tasty-hunit, transformers, unix
-}:
-mkDerivation {
-  pname = "temporary-resourcet";
-  version = "0.1.0.0";
-  src = ./.;
-  libraryHaskellDepends = [
-    base directory exceptions filepath resourcet transformers unix
-  ];
-  testHaskellDepends = [
-    base directory resourcet tasty tasty-hunit transformers
-  ];
-  homepage = "http://www.github.com/ttuegel/temporary-resourcet";
-  description = "Portable temporary files and directories with automatic deletion";
-  license = stdenv.lib.licenses.bsd3;
-}
+let nixpkgs = import ./nixpkgs.nix; in
+
+let
+
+  inherit (nixpkgs) pkgs;
+  inherit (pkgs) haskellPackages lib;
+
+
+  blacklistDirs = [ ".git" "dist" "dist-newstyle" ];
+  whitelistExts = [ ".cabal" ".el" ".hs" ];
+  whitelistNames = [ "COPYING" "LICENSE" ];
+
+  filterSrc =
+    let
+      overrideSrc = drv: f:
+        let inherit (pkgs.haskell.lib) overrideCabal; in
+        overrideCabal drv (args: args // { src = f args.src; });
+      predicate = path: type:
+        let inherit (lib) any elem hasSuffix; in
+        let baseName = baseNameOf path; in
+        if type == "directory"
+          then !(elem baseName blacklistDirs)
+          else any (suf: hasSuffix suf baseName) whitelistExts
+            || any (name: baseName == name) whitelistNames;
+    in
+      drv: overrideSrc drv (src: builtins.filterSource predicate src);
+
+  drv = filterSrc (haskellPackages.callPackage ./package.nix {});
+
+in
+
+  drv

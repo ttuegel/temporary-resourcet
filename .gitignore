@@ -22,7 +22,6 @@ cabal.sandbox.config
 /deps
 /data
 /corpus
-/*.json
 /*.json.ib
 /*.json.bp
 /snapshot.yaml
