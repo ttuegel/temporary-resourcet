@@ -1,8 +1,29 @@
-# OS junk
-Thumbs.db
-.DS_Store
+dist
+dist-newstyle
+cabal-dev
+*.o
+*.hi
+*.chi
+*.chs.h
+*.dyn_o
+*.dyn_hi
+.hpc
+.hsenv
+.cabal-sandbox/
+cabal.sandbox.config
+*.prof
+*.aux
+*.hp
 
-# Build artifacts
-dist/
-
-.*.swp
+/*.submodules
+/.stack-work/
+/.stack-work-*/
+/result
+/deps
+/data
+/corpus
+/*.json
+/*.json.ib
+/*.json.bp
+/snapshot.yaml
+/stack-ci.yaml
